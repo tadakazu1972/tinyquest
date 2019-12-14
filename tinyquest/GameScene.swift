@@ -44,6 +44,11 @@ class GameScene: SKScene {
             n.strokeColor = SKColor.green
             self.addChild(n)
         }
+        
+        //タイトル画面へ遷移
+        let scene = TitleScene(size: self.scene!.size)
+        scene.scaleMode = SKSceneScaleMode.aspectFill
+        self.view!.presentScene(scene)
     }
     
     func touchMoved(toPoint pos : CGPoint) {
