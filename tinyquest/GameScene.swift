@@ -17,12 +17,17 @@ class GameScene: SKScene {
     //player
     var texture_player:[SKTexture] = []
     var playerNode : SKSpriteNode?
+    //map
+    var mapTexture :[SKTexture] = []
+    var mapNode : SKSpriteNode?
     
     override func didMove(to view: SKView) {
+        //重力の設定
+        self.physicsWorld.gravity = CGVector(dx:0, dy:0)
         //プレイヤー画像ロード
-        let atlas = SKTextureAtlas(named:"player")
+        let playerAtlas = SKTextureAtlas(named:"player")
         for i in 1...8 {
-            texture_player.append(atlas.textureNamed("zakk0"+String(i)))
+            texture_player.append(playerAtlas.textureNamed("zakk0"+String(i)))
         }
         //アニメーションのための上下左右の組セット
         let animation_player_set1:[SKTexture] = [ texture_player[0], texture_player[1] ]
@@ -40,7 +45,29 @@ class GameScene: SKScene {
             playerNode.setScale(2.0)
             playerNode.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
             playerNode.run(SKAction.repeatForever(animation_player))
+            //当たり判定範囲
+            playerNode.physicsBody = SKPhysicsBody(rectangleOf: playerNode.frame.size)
+            //カテゴリ
+            playerNode.physicsBody?.categoryBitMask = 0x1 << 1
+            //衝突
+            playerNode.physicsBody?.collisionBitMask = 0x1 << 0
             self.addChild(playerNode)
+        }
+        
+        //マップ画像
+        let mapAtlas = SKTextureAtlas(named:"map")
+        mapTexture.append(mapAtlas.textureNamed("tree"))
+        self.mapNode = SKSpriteNode(texture: mapTexture[0])
+        if let mapNode = self.mapNode {
+            mapNode.setScale(2.0)
+            mapNode.position = CGPoint(x:200, y:400)
+            //当たり判定範囲
+            mapNode.physicsBody = SKPhysicsBody(rectangleOf: mapNode.frame.size)
+            //カテゴリ
+            mapNode.physicsBody?.categoryBitMask = 0x1 << 0
+            //衝突マスク
+            mapNode.physicsBody?.collisionBitMask = 0x1 << 2
+            self.addChild(mapNode)
         }
         
         // Get label node from scene and store it for use later
