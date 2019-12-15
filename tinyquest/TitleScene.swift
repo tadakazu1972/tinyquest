@@ -16,7 +16,7 @@ class TitleScene: SKScene {
     override func didMove(to view: SKView){
         
         //タイトル
-        let titleLabel = SKLabelNode(fontNamed: "ArialRoundedMyBold")
+        let titleLabel = SKLabelNode(fontNamed: "ArialRoundedMtBold")
         titleLabel.text = "Tiny Quest"
         titleLabel.fontSize = 80
         titleLabel.fontColor = UIColor.white

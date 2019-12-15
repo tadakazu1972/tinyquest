@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
@@ -24,6 +24,8 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         //重力の設定
         self.physicsWorld.gravity = CGVector(dx:0, dy:0)
+        //衝突判定の委託
+        self.physicsWorld.contactDelegate = self
         //プレイヤー画像ロード
         let playerAtlas = SKTextureAtlas(named:"player")
         for i in 1...8 {
@@ -42,6 +44,8 @@ class GameScene: SKScene {
         let animation_player = SKAction.animate(with: animation_player_set[0], timePerFrame: 0.2)
         //プレイヤー描画
         if let playerNode = self.playerNode {
+            //衝突時処理の判別のため名付け
+            playerNode.name="player"
             playerNode.setScale(2.0)
             playerNode.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
             playerNode.run(SKAction.repeatForever(animation_player))
@@ -51,6 +55,10 @@ class GameScene: SKScene {
             playerNode.physicsBody?.categoryBitMask = 0x1 << 1
             //衝突
             playerNode.physicsBody?.collisionBitMask = 0x1 << 0
+            //衝突検知設定
+            playerNode.physicsBody?.contactTestBitMask = 0x1 << 0
+            //衝突時回転禁止
+            playerNode.physicsBody?.allowsRotation = false
             self.addChild(playerNode)
         }
         
@@ -67,6 +75,8 @@ class GameScene: SKScene {
             mapNode.physicsBody?.categoryBitMask = 0x1 << 0
             //衝突マスク
             mapNode.physicsBody?.collisionBitMask = 0x1 << 2
+            //動かない
+            mapNode.physicsBody?.isDynamic = false
             self.addChild(mapNode)
         }
         
@@ -85,12 +95,24 @@ class GameScene: SKScene {
             spinnyNode.lineWidth = 2.5
             
             spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
+            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.2),
                                               SKAction.fadeOut(withDuration: 0.5),
                                               SKAction.removeFromParent()]))
         }
     }
     
+    //衝突時にコール
+    func didBegin(_ contact: SKPhysicsContact){
+        print("call didBegin")
+        if contact.bodyA.node?.name == "player" || contact.bodyB.node?.name == "player" {
+            self.playerNode?.removeAction(forKey: "move")
+            if let n = self.spinnyNode?.copy() as! SKShapeNode? {
+                n.position = self.playerNode!.position
+                n.strokeColor = SKColor.red
+                self.addChild(n)
+            }
+        }
+    }
     
     func touchDown(atPoint pos : CGPoint) {
         if let n = self.spinnyNode?.copy() as! SKShapeNode? {
@@ -127,7 +149,7 @@ class GameScene: SKScene {
         //タッチした位置まで移動するアクション作成
         let action = SKAction.move(to: CGPoint(x:location.x, y:location.y), duration:1.0)
         //アクション実行
-        self.playerNode?.run(action)
+        self.playerNode?.run(action, withKey:"move")
         
         if let label = self.label {
             label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
