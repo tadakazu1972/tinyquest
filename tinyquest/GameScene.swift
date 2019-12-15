@@ -16,7 +16,7 @@ class GameScene: SKScene {
     
     //player
     var texture_player:[SKTexture] = []
-    var sprite_player : SKSpriteNode?
+    var playerNode : SKSpriteNode?
     
     override func didMove(to view: SKView) {
         //プレイヤー画像ロード
@@ -32,15 +32,16 @@ class GameScene: SKScene {
         //後で使いやすくするため配列に格納
         let animation_player_set = [animation_player_set1, animation_player_set2, animation_player_set3, animation_player_set4]
         //初期画像セット
-        let sprite_player = SKSpriteNode(texture: texture_player[0])
+        self.playerNode = SKSpriteNode(texture: texture_player[0])
         //アニメーション設定
         let animation_player = SKAction.animate(with: animation_player_set[0], timePerFrame: 0.2)
         //プレイヤー描画
-        sprite_player.setScale(2.0)
-        sprite_player.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
-        sprite_player.run(SKAction.repeatForever(animation_player))
-        self.addChild(sprite_player)
-        
+        if let playerNode = self.playerNode {
+            playerNode.setScale(2.0)
+            playerNode.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
+            playerNode.run(SKAction.repeatForever(animation_player))
+            self.addChild(playerNode)
+        }
         
         // Get label node from scene and store it for use later
         self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
@@ -71,10 +72,10 @@ class GameScene: SKScene {
             self.addChild(n)
         }
         
-        //タイトル画面へ遷移
+        /*//タイトル画面へ遷移
         let scene = TitleScene(size: self.scene!.size)
         scene.scaleMode = SKSceneScaleMode.aspectFill
-        self.view!.presentScene(scene)
+        self.view!.presentScene(scene)*/
     }
     
     func touchMoved(toPoint pos : CGPoint) {
@@ -94,6 +95,13 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //タッチ座標取得
+        let location = touches.first!.location(in: self)
+        //タッチした位置まで移動するアクション作成
+        let action = SKAction.move(to: CGPoint(x:location.x, y:location.y), duration:1.0)
+        //アクション実行
+        self.playerNode?.run(action)
+        
         if let label = self.label {
             label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
         }
