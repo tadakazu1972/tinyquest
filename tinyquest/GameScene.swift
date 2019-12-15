@@ -25,11 +25,16 @@ class GameScene: SKScene {
             texture_player.append(atlas.textureNamed("zakk0"+String(i)))
         }
         //アニメーションのための上下左右の組セット
-        let texture_player_down:[SKTexture] = [ texture_player[0], texture_player[1] ]
+        let animation_player_set1:[SKTexture] = [ texture_player[0], texture_player[1] ]
+        let animation_player_set2:[SKTexture] = [ texture_player[2], texture_player[3] ]
+        let animation_player_set3:[SKTexture] = [ texture_player[4], texture_player[5] ]
+        let animation_player_set4:[SKTexture] = [ texture_player[6], texture_player[7] ]
+        //後で使いやすくするため配列に格納
+        let animation_player_set = [animation_player_set1, animation_player_set2, animation_player_set3, animation_player_set4]
         //初期画像セット
         let sprite_player = SKSpriteNode(texture: texture_player[0])
         //アニメーション設定
-        let animation_player = SKAction.animate(with: texture_player_down, timePerFrame: 0.2)
+        let animation_player = SKAction.animate(with: animation_player_set[0], timePerFrame: 0.2)
         //プレイヤー描画
         sprite_player.setScale(2.0)
         sprite_player.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
