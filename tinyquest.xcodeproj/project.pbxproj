@@ -65,13 +65,13 @@
 				599E8D3523A47DE10092C785 /* AppDelegate.swift */,
 				599E8D3723A47DE10092C785 /* GameScene.sks */,
 				599E8D3923A47DE10092C785 /* Actions.sks */,
-				599E8D3B23A47DE10092C785 /* GameScene.swift */,
 				599E8D3D23A47DE10092C785 /* GameViewController.swift */,
+				599E8D4D23A484EF0092C785 /* TitleScene.swift */,
+				599E8D3B23A47DE10092C785 /* GameScene.swift */,
 				599E8D3F23A47DE10092C785 /* Main.storyboard */,
 				599E8D4223A47DE30092C785 /* Assets.xcassets */,
 				599E8D4423A47DE30092C785 /* LaunchScreen.storyboard */,
 				599E8D4723A47DE30092C785 /* Info.plist */,
-				599E8D4D23A484EF0092C785 /* TitleScene.swift */,
 			);
 			path = tinyquest;
 			sourceTree = "<group>";
@@ -299,6 +299,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M9HA2WB389;
 				INFOPLIST_FILE = tinyquest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -317,6 +318,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M9HA2WB389;
 				INFOPLIST_FILE = tinyquest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

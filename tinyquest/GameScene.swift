@@ -14,7 +14,28 @@ class GameScene: SKScene {
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     
+    //player
+    var texture_player:[SKTexture] = []
+    var sprite_player : SKSpriteNode?
+    
     override func didMove(to view: SKView) {
+        //プレイヤー画像ロード
+        let atlas = SKTextureAtlas(named:"player")
+        for i in 1...8 {
+            texture_player.append(atlas.textureNamed("zakk0"+String(i)))
+        }
+        //アニメーションのための上下左右の組セット
+        let texture_player_down:[SKTexture] = [ texture_player[0], texture_player[1] ]
+        //初期画像セット
+        let sprite_player = SKSpriteNode(texture: texture_player[0])
+        //アニメーション設定
+        let animation_player = SKAction.animate(with: texture_player_down, timePerFrame: 0.2)
+        //プレイヤー描画
+        sprite_player.setScale(2.0)
+        sprite_player.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
+        sprite_player.run(SKAction.repeatForever(animation_player))
+        self.addChild(sprite_player)
+        
         
         // Get label node from scene and store it for use later
         self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
